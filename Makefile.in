@@ -1,0 +1,10 @@
+prefix = $(DESTDIR)@prefix@
+srcdir = @srcdir@
+INSTALL = @INSTALL@
+
+install: all
+	mkdir -p ${prefix}/etc/{conf.d,init.d}/
+	mkdir -p ${prefix}/usr/bin/
+	${INSTALL} ${srcdir}/libvirtwol ${prefix}/usr/bin/
+	${INSTALL} ${srcdir}/gentoo/init.d/libvirt-wakeonlan ${prefix}/etc/{init.d}/
+	${INSTALL} ${srcdir}/gentoo/conf.d/libvirt-wakeonlan ${prefix}/etc/{conf.d}/
