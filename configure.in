@@ -1,0 +1,15 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.68])
+AC_INIT([libvirt-wakeonlan], [20120415], [src@niftiestsoftware.com])
+AC_PROG_INSTALL
+
+# Checks for header files.
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_CONFIG_FILES()
+AC_OUTPUT(Makefile)
