@@ -1,0 +1,4 @@
+# /etc/conf.d/libvirtd
+
+LIBVIRTDWOL_INTERFACE="eth0"
+
