@@ -1,0 +1,26 @@
+#!/sbin/runscript
+
+description="Starts KVM instances from wake on lan packets"
+
+depend() {
+    need net
+	after libvirtd
+}
+
+start() {
+    ebegin "Starting libvirt-wakeonlan"
+    start-stop-daemon --start \
+	--background -m \
+	--pidfile=/var/run/libvirt-wakeonlan.pid \
+        --exec /usr/sbin/libvirtwol -- ${LIBVIRTDWOL_INTERFACE}
+    eend $?
+}
+
+stop() {
+
+    ebegin "Stopping libvirt-wakeonlan"
+
+    start-stop-daemon --stop --quiet --pidfile=/var/run/libvirt-wakeonlan.pid
+    eend $?
+}
+
