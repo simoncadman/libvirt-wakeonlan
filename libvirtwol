@@ -23,7 +23,7 @@ import libvirt
 from xml.dom import minidom
 
 
-def startserverbymacaddress(mac):
+def StartServerByMACAddress(mac):
     conn = libvirt.open(None)
     if conn is None:
         print 'Failed to open connection to the hypervisor'
@@ -46,7 +46,7 @@ def startserverbymacaddress(mac):
                     return
 
 
-def getmac(s):
+def GetMACAddress(s):
     if len(s) == 110:
         bytes = map(lambda x: '%.2x' % x, map(ord, s))
         counted = 0
@@ -82,7 +82,7 @@ def getmac(s):
             return macaddress
 
 
-def decode_ip_packet(s):
+def DecodeIPPacket(s):
     d = {}
     d['version'] = (ord(s[0]) & 0xf0) >> 4
     d['header_len'] = ord(s[0]) & 0x0f
@@ -104,14 +104,14 @@ def decode_ip_packet(s):
     return d
 
 
-def inspectpacket(pktlen, data, timestamp):
+def InspectIPPacket(pktlen, data, timestamp):
     if not data:
         return
-    decoded = decode_ip_packet(data[14:])
-    macaddress = getmac(decoded['data'])
+    decoded = DecodeIPPacket(data[14:])
+    macaddress = GetMACAddress(decoded['data'])
     if not macaddress:
         return
-    startserverbymacaddress(macaddress)
+    StartServerByMACAddress(macaddress)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -126,6 +126,6 @@ if __name__ == '__main__':
 
     try:
         while 1:
-            p.dispatch(1, inspectpacket)
+            p.dispatch(1, InspectIPPacket)
     except KeyboardInterrupt:
         pass
