@@ -14,111 +14,118 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import pcap, sys, socket, struct, string, libvirt
+import pcap
+import sys
+import socket
+import struct
+import string
+import libvirt
 from xml.dom import minidom
 
+
 def startserverbymacaddress(mac):
-  conn = libvirt.open(None)
-  if conn == None:
-      print 'Failed to open connection to the hypervisor'
-      sys.exit(1)
-  
-  domains = conn.listDefinedDomains()
-  for domainName in domains:
-    domain = conn.lookupByName(domainName)
-    params = []
-    # TODO - replace with api calls to fetch network interfaces
-    xml = minidom.parseString(domain.XMLDesc(0))
-    devices = xml.documentElement.getElementsByTagName("devices")
-    for device in devices:
-      for interface in device.getElementsByTagName("interface"):
-	macadd = interface.getElementsByTagName("mac")
-	foundmac = macadd[0].getAttribute("address")
-	if foundmac == mac:
-	  print "Waking up" , domainName
-	  domain.create()
-	  return
+    conn = libvirt.open(None)
+    if conn is None:
+        print 'Failed to open connection to the hypervisor'
+        sys.exit(1)
+
+    domains = conn.listDefinedDomains()
+    for domainName in domains:
+        domain = conn.lookupByName(domainName)
+        params = []
+        # TODO - replace with api calls to fetch network interfaces
+        xml = minidom.parseString(domain.XMLDesc(0))
+        devices = xml.documentElement.getElementsByTagName("devices")
+        for device in devices:
+            for interface in device.getElementsByTagName("interface"):
+                macadd = interface.getElementsByTagName("mac")
+                foundmac = macadd[0].getAttribute("address")
+                if foundmac == mac:
+                    print "Waking up", domainName
+                    domain.create()
+                    return
+
 
 def getmac(s):
-  if len(s) == 110:
-    bytes = map(lambda x: '%.2x' % x, map(ord, s))
-    counted = 0
-    macpart = 0
-    maccounted = 0
-    macaddress = None
-    newmac = ""
-    
-    for byte in bytes:
-      if counted < 6:
-	# find 6 repetitions of 255
-	if byte == "ff":
-	  counted+=1
-      else:
-	# find 16 repititions of 48 bit mac
-	macpart +=1
-	if newmac != "":
-	  newmac += ":"
-	  
-	newmac += byte
-	
-	if macpart == 6 and macaddress == None:
-	  macaddress = newmac
-	
-	if macpart == 6:
-	  if macaddress != newmac:
-	    return None
-	  newmac = ""
-	  macpart = 0
-	  maccounted += 1
+    if len(s) == 110:
+        bytes = map(lambda x: '%.2x' % x, map(ord, s))
+        counted = 0
+        macpart = 0
+        maccounted = 0
+        macaddress = None
+        newmac = ""
 
-    if counted == 6 and maccounted == 16:
-      return macaddress
+        for byte in bytes:
+            if counted < 6:
+                # find 6 repetitions of 255
+                if byte == "ff":
+                    counted += 1
+            else:
+                # find 16 repititions of 48 bit mac
+                macpart += 1
+                if newmac != "":
+                    newmac += ":"
+
+                newmac += byte
+
+                if macpart is 6 and macaddress is None:
+                    macaddress = newmac
+
+                if macpart is 6:
+                    if macaddress != newmac:
+                        return None
+                    newmac = ""
+                    macpart = 0
+                    maccounted += 1
+
+        if counted == 6 and maccounted == 16:
+            return macaddress
+
 
 def decode_ip_packet(s):
-  d={}
-  d['version']=(ord(s[0]) & 0xf0) >> 4
-  d['header_len']=ord(s[0]) & 0x0f
-  d['tos']=ord(s[1])
-  d['total_len']=socket.ntohs(struct.unpack('H',s[2:4])[0])
-  d['id']=socket.ntohs(struct.unpack('H',s[4:6])[0])
-  d['flags']=(ord(s[6]) & 0xe0) >> 5
-  d['fragment_offset']=socket.ntohs(struct.unpack('H',s[6:8])[0] & 0x1f)
-  d['ttl']=ord(s[8])
-  d['protocol']=ord(s[9])
-  d['checksum']=socket.ntohs(struct.unpack('H',s[10:12])[0])
-  d['source_address']=pcap.ntoa(struct.unpack('i',s[12:16])[0])
-  d['destination_address']=pcap.ntoa(struct.unpack('i',s[16:20])[0])
-  if d['header_len']>5:
-      d['options']=s[20:4*(d['header_len']-5)]
-  else:
-      d['options']=None
-  d['data']=s[4*d['header_len']:]
-  return d
+    d = {}
+    d['version'] = (ord(s[0]) & 0xf0) >> 4
+    d['header_len'] = ord(s[0]) & 0x0f
+    d['tos'] = ord(s[1])
+    d['total_len'] = socket.ntohs(struct.unpack('H', s[2:4])[0])
+    d['id'] = socket.ntohs(struct.unpack('H', s[4:6])[0])
+    d['flags'] = (ord(s[6]) & 0xe0) >> 5
+    d['fragment_offset'] = socket.ntohs(struct.unpack('H', s[6:8])[0] & 0x1f)
+    d['ttl'] = ord(s[8])
+    d['protocol'] = ord(s[9])
+    d['checksum'] = socket.ntohs(struct.unpack('H', s[10:12])[0])
+    d['source_address'] = pcap.ntoa(struct.unpack('i', s[12:16])[0])
+    d['destination_address'] = pcap.ntoa(struct.unpack('i', s[16:20])[0])
+    if d['header_len'] > 5:
+        d['options'] = s[20:4 * (d['header_len'] - 5)]
+    else:
+        d['options'] = None
+    d['data'] = s[4 * d['header_len']:]
+    return d
+
 
 def inspectpacket(pktlen, data, timestamp):
-  if not data:
-    return
-  decoded = decode_ip_packet(data[14:])
-  macaddress = getmac(decoded['data'])
-  if not macaddress:
-    return
-  startserverbymacaddress(macaddress)
+    if not data:
+        return
+    decoded = decode_ip_packet(data[14:])
+    macaddress = getmac(decoded['data'])
+    if not macaddress:
+        return
+    startserverbymacaddress(macaddress)
 
-if __name__=='__main__':
-  if len(sys.argv) < 2:
-    print('usage: libvirtwol <interface>')
-    sys.exit(0)
-  
-  interface=sys.argv[1]
-  p = pcap.pcapObject()
-  net, mask = pcap.lookupnet(interface)
-  p.open_live(interface, 1600, 0, 100)
-  p.setfilter('udp and port 7 or port 9', 0, 0)
-  
-  try:
-    while 1:
-      p.dispatch(1, inspectpacket)
-  except KeyboardInterrupt:
-    print '%s' % sys.exc_type
-    print 'shutting down'
-    print '%d packets received, %d packets dropped, %d packets dropped by interface' % p.stats()
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('usage: libvirtwol <interface>')
+        sys.exit(0)
+
+    interface = sys.argv[1]
+    p = pcap.pcapObject()
+    net, mask = pcap.lookupnet(interface)
+    p.open_live(interface, 1600, 0, 100)
+    p.setfilter('udp and port 7 or port 9', 0, 0)
+
+    try:
+        while 1:
+            p.dispatch(1, inspectpacket)
+    except KeyboardInterrupt:
+        pass
