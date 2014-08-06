@@ -1,6 +1,6 @@
 #!/sbin/runscript
 
-description="Starts KVM instances from wake on lan packets"
+description="Starts libvirt instances from wake on lan packets"
 
 depend() {
     need net
