@@ -50,4 +50,3 @@ class Utils(object):
             print "LibVirt Wake-On-Lan Version " + Version
             sys.exit(0)
         return False
-

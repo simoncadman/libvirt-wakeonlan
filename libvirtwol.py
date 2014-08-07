@@ -123,11 +123,11 @@ def InspectIPPacket(pktlen, data, timestamp):
 
 if __name__ == '__main__':
     from lvwolutils import Utils
-    
+
     # line below is replaced on commit
-    LVWOLVersion = "20140807 112433"
+    LVWOLVersion = "20140807 112531"
     Utils.ShowVersion(LVWOLVersion)
-    
+
     if len(sys.argv) < 2:
         print('usage: libvirtwol <interface>')
         sys.exit(0)
