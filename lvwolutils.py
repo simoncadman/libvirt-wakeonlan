@@ -34,7 +34,6 @@ class Utils(object):
                 level=logging.INFO,
                 format=logformat,
                 datefmt=dateformat)
-            Utils.FixFilePermissions(logpath)
         except Exception:
             logging.basicConfig(
                 level=logging.INFO,
