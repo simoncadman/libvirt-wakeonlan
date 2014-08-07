@@ -1,4 +1,12 @@
-#! /usr/bin/env python2
+#! /bin/sh
+"true" '''\'
+if command -v python2 > /dev/null; then
+  exec python2 "$0" "$@"
+else
+  exec python "$0" "$@"
+fi
+exit $?
+'''
 #    LibVirt Wake On Lan
 #    Copyright (C) 2012 Simon Cadman
 #

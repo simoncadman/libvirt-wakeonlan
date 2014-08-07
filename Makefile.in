@@ -6,7 +6,7 @@ all: libvirtwol
 
 install: all 
 	mkdir -p ${prefix}/sbin/
-	${INSTALL} ${srcdir}/libvirtwol ${prefix}/sbin/
+	${INSTALL} ${srcdir}/libvirtwol.py ${prefix}/sbin/libvirtwol
 	
 	# gentoo
 	if [ -f /etc/gentoo-release ] ; then \
