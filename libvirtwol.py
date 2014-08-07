@@ -32,7 +32,7 @@ from xml.dom import minidom
 
 
 class LibVirtWakeOnLan:
-    
+
     @staticmethod
     def StartServerByMACAddress(mac):
         conn = libvirt.open(None)
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     from lvwolutils import Utils
 
     # line below is replaced on commit
-    LVWOLVersion = "20140807 113906"
+    LVWOLVersion = "20140807 113924"
     Utils.ShowVersion(LVWOLVersion)
 
     if len(sys.argv) < 2:
