@@ -22,35 +22,40 @@ sys.path.insert(0, ".")
 
 from lvwolutils import Utils
 
+
 def teardown_function(function):
     logging.shutdown()
     reload(logging)
 
+
 def test_SetupLogging():
     testLogFile = '/tmp/test.log'
-    assert os.path.exists(testLogFile) == False
-    assert Utils.SetupLogging(testLogFile) == True
+    assert os.path.exists(testLogFile) is False
+    assert Utils.SetupLogging(testLogFile) is True
     logging.error('test_setupLogging error test')
-    assert os.path.exists(testLogFile) == True
+    assert os.path.exists(testLogFile) is True
     os.unlink(testLogFile)
+
 
 def test_SetupLoggingDefault():
     testLogFile = '/tmp/test.log'
-    assert os.path.exists(testLogFile) == False
+    assert os.path.exists(testLogFile) is False
     Utils.logpath = testLogFile
-    assert Utils.SetupLogging() == True
+    assert Utils.SetupLogging() is True
     logging.error('test_setupLogging error test')
-    assert os.path.exists(testLogFile) == True
+    assert os.path.exists(testLogFile) is True
     os.unlink(testLogFile)
+
 
 def test_SetupLoggingFails():
     testLogFile = '/tmp/dirthatdoesntexist/test.log'
-    assert os.path.exists(testLogFile) == False
-    assert Utils.SetupLogging(testLogFile) == False
-    assert os.path.exists(testLogFile) == False
+    assert os.path.exists(testLogFile) is False
+    assert Utils.SetupLogging(testLogFile) is False
+    assert os.path.exists(testLogFile) is False
+
 
 def test_showVersion():
-    assert Utils.ShowVersion("12345") == False
+    assert Utils.ShowVersion("12345") is False
     sys.argv = ['testfile', 'version']
     with pytest.raises(SystemExit):
         Utils.ShowVersion("12345")
