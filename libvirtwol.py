@@ -31,101 +31,104 @@ import libvirt
 from xml.dom import minidom
 
 
-def StartServerByMACAddress(mac):
-    conn = libvirt.open(None)
-    if conn is None:
-        print 'Failed to open connection to the hypervisor'
-        sys.exit(1)
+class LibVirtWakeOnLan:
+    
+    @staticmethod
+    def StartServerByMACAddress(mac):
+        conn = libvirt.open(None)
+        if conn is None:
+            print 'Failed to open connection to the hypervisor'
+            sys.exit(1)
 
-    domains = conn.listDefinedDomains()
-    for domainName in domains:
-        domain = conn.lookupByName(domainName)
-        params = []
-        # TODO - replace with api calls to fetch network interfaces
-        xml = minidom.parseString(domain.XMLDesc(0))
-        devices = xml.documentElement.getElementsByTagName("devices")
-        for device in devices:
-            for interface in device.getElementsByTagName("interface"):
-                macadd = interface.getElementsByTagName("mac")
-                foundmac = macadd[0].getAttribute("address")
-                if foundmac == mac:
-                    print "Waking up", domainName
-                    domain.create()
-                    return
+        domains = conn.listDefinedDomains()
+        for domainName in domains:
+            domain = conn.lookupByName(domainName)
+            params = []
+            # TODO - replace with api calls to fetch network interfaces
+            xml = minidom.parseString(domain.XMLDesc(0))
+            devices = xml.documentElement.getElementsByTagName("devices")
+            for device in devices:
+                for interface in device.getElementsByTagName("interface"):
+                    macadd = interface.getElementsByTagName("mac")
+                    foundmac = macadd[0].getAttribute("address")
+                    if foundmac == mac:
+                        print "Waking up", domainName
+                        domain.create()
+                        return
 
+    @staticmethod
+    def GetMACAddress(s):
+        if len(s) == 110:
+            bytes = map(lambda x: '%.2x' % x, map(ord, s))
+            counted = 0
+            macpart = 0
+            maccounted = 0
+            macaddress = None
+            newmac = ""
 
-def GetMACAddress(s):
-    if len(s) == 110:
-        bytes = map(lambda x: '%.2x' % x, map(ord, s))
-        counted = 0
-        macpart = 0
-        maccounted = 0
-        macaddress = None
-        newmac = ""
+            for byte in bytes:
+                if counted < 6:
+                    # find 6 repetitions of 255
+                    if byte == "ff":
+                        counted += 1
+                else:
+                    # find 16 repititions of 48 bit mac
+                    macpart += 1
+                    if newmac != "":
+                        newmac += ":"
 
-        for byte in bytes:
-            if counted < 6:
-                # find 6 repetitions of 255
-                if byte == "ff":
-                    counted += 1
-            else:
-                # find 16 repititions of 48 bit mac
-                macpart += 1
-                if newmac != "":
-                    newmac += ":"
+                    newmac += byte
 
-                newmac += byte
+                    if macpart is 6 and macaddress is None:
+                        macaddress = newmac
 
-                if macpart is 6 and macaddress is None:
-                    macaddress = newmac
+                    if macpart is 6:
+                        if macaddress != newmac:
+                            return None
+                        newmac = ""
+                        macpart = 0
+                        maccounted += 1
 
-                if macpart is 6:
-                    if macaddress != newmac:
-                        return None
-                    newmac = ""
-                    macpart = 0
-                    maccounted += 1
+            if counted == 6 and maccounted == 16:
+                return macaddress
 
-        if counted == 6 and maccounted == 16:
-            return macaddress
+    @staticmethod
+    def DecodeIPPacket(s):
+        d = {}
+        d['version'] = (ord(s[0]) & 0xf0) >> 4
+        d['header_len'] = ord(s[0]) & 0x0f
+        d['tos'] = ord(s[1])
+        d['total_len'] = socket.ntohs(struct.unpack('H', s[2:4])[0])
+        d['id'] = socket.ntohs(struct.unpack('H', s[4:6])[0])
+        d['flags'] = (ord(s[6]) & 0xe0) >> 5
+        d['fragment_offset'] = socket.ntohs(struct.unpack('H', s[6:8])[0] & 0x1f)
+        d['ttl'] = ord(s[8])
+        d['protocol'] = ord(s[9])
+        d['checksum'] = socket.ntohs(struct.unpack('H', s[10:12])[0])
+        d['source_address'] = pcap.ntoa(struct.unpack('i', s[12:16])[0])
+        d['destination_address'] = pcap.ntoa(struct.unpack('i', s[16:20])[0])
+        if d['header_len'] > 5:
+            d['options'] = s[20:4 * (d['header_len'] - 5)]
+        else:
+            d['options'] = None
+        d['data'] = s[4 * d['header_len']:]
+        return d
 
-
-def DecodeIPPacket(s):
-    d = {}
-    d['version'] = (ord(s[0]) & 0xf0) >> 4
-    d['header_len'] = ord(s[0]) & 0x0f
-    d['tos'] = ord(s[1])
-    d['total_len'] = socket.ntohs(struct.unpack('H', s[2:4])[0])
-    d['id'] = socket.ntohs(struct.unpack('H', s[4:6])[0])
-    d['flags'] = (ord(s[6]) & 0xe0) >> 5
-    d['fragment_offset'] = socket.ntohs(struct.unpack('H', s[6:8])[0] & 0x1f)
-    d['ttl'] = ord(s[8])
-    d['protocol'] = ord(s[9])
-    d['checksum'] = socket.ntohs(struct.unpack('H', s[10:12])[0])
-    d['source_address'] = pcap.ntoa(struct.unpack('i', s[12:16])[0])
-    d['destination_address'] = pcap.ntoa(struct.unpack('i', s[16:20])[0])
-    if d['header_len'] > 5:
-        d['options'] = s[20:4 * (d['header_len'] - 5)]
-    else:
-        d['options'] = None
-    d['data'] = s[4 * d['header_len']:]
-    return d
-
-
-def InspectIPPacket(pktlen, data, timestamp):
-    if not data:
-        return
-    decoded = DecodeIPPacket(data[14:])
-    macaddress = GetMACAddress(decoded['data'])
-    if not macaddress:
-        return
-    StartServerByMACAddress(macaddress)
+    @staticmethod
+    def InspectIPPacket(pktlen, data, timestamp):
+        if not data:
+            return
+        decoded = LibVirtWakeOnLan.DecodeIPPacket(data[14:])
+        macaddress = LibVirtWakeOnLan.GetMACAddress(decoded['data'])
+        if not macaddress:
+            return
+        LibVirtWakeOnLan.StartServerByMACAddress(macaddress)
 
 if __name__ == '__main__':
     from lvwolutils import Utils
 
     # line below is replaced on commit
-    LVWOLVersion = "20140807 112531"
+    LVWOLVersion = "20140807 113906"
     Utils.ShowVersion(LVWOLVersion)
 
     if len(sys.argv) < 2:
@@ -140,6 +143,6 @@ if __name__ == '__main__':
 
     try:
         while 1:
-            p.dispatch(1, InspectIPPacket)
+            p.dispatch(1, LibVirtWakeOnLan.InspectIPPacket)
     except KeyboardInterrupt:
         pass
