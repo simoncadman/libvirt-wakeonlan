@@ -1,0 +1,8 @@
+*.pyc
+.coverage
+htmlcov
+Makefile
+config.log
+config.status
+.DS_Store
+.*swp
