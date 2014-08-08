@@ -27,7 +27,8 @@ def test_StartServerByMACAddress():
 
 
 def test_GetMACAddress():
-    testdata = "7ZMABwBuwov////////erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz8="
+    testdata = "7ZMABwBuwov////////erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/"
+    testdata += "erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz/erb7vsz8="
     assert LibVirtWakeOnLan.GetMACAddress(base64.b64decode(testdata)) == "de:ad:be:ef:b3:3f"
 
 
@@ -38,6 +39,6 @@ def test_DecodeIPPacket():
 def test_InspectIPPacketNoMAC():
     pass
 
-    
+
 def test_InspectIPPacketWithMAC():
     pass
