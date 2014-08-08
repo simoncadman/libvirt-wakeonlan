@@ -54,7 +54,8 @@ class LibVirtWakeOnLan:
                     if foundmac == mac:
                         print "Waking up", domainName
                         domain.create()
-                        return
+                        return True
+        return False
 
     @staticmethod
     def GetMACAddress(s):
@@ -122,13 +123,13 @@ class LibVirtWakeOnLan:
         macaddress = LibVirtWakeOnLan.GetMACAddress(decoded['data'])
         if not macaddress:
             return
-        LibVirtWakeOnLan.StartServerByMACAddress(macaddress)
+        return LibVirtWakeOnLan.StartServerByMACAddress(macaddress)
 
 if __name__ == '__main__':
     from lvwolutils import Utils
 
     # line below is replaced on commit
-    LVWOLVersion = "20140807 113924"
+    LVWOLVersion = "20140808 103335"
     Utils.ShowVersion(LVWOLVersion)
 
     if len(sys.argv) < 2:
