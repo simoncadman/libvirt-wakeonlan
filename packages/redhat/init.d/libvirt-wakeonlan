@@ -14,7 +14,6 @@
                                                                                                                                                   
 exec="/usr/sbin/libvirtwol"                                                                                                     
 prog="libvirt-wakeonlan"                                                                                                                        
-config="/etc/cloudresize/cloudresize.conf"                                                                                                        
                                                                                                                                                   
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog                                                                                                                               
                                                                                                                                                                                     
@@ -23,7 +22,6 @@ pidfile=/var/run/$proc.pid
                                                                                                                                                                                     
 start() {                                                                                                                                                                           
     [ -x $exec ] || exit 5                                                                                                                                                          
-    [ -f $config ] || exit 6                                                                                                                                                        
     echo -n $"Starting $prog: "                                                                                                                                                     
     # if not running, start it up here, usually something like "daemon $exec"                                                                                                       
     daemon $exec $LIBVIRTDWOL_INTERFACE                                                                                                                                                                   
