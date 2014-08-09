@@ -1,0 +1,31 @@
+# Maintainer: Simon Cadman <src@niftiestsoftware.com>
+pkgname=libvirt-wakeonlan
+pkgver=20140809
+pkgrel=1
+pkgdesc="Starts KVM instances from wake on lan packets"
+arch=('any')
+url="http://lvwol.niftiestsoftware.com"
+license=('GPL3')
+depends=('libvirt-python' 'libvirt')
+makedepends=('git')
+changelog=changelog
+source=()
+md5sums=()
+_gitroot="git://github.com/simoncadman/libvirt-wakeonlan.git"
+_gitversion="689eeeca3d63276d802e00af5a7c716ea14db783"
+
+
+build() {
+  git clone $_gitroot "$srcdir/$pkgname-$pkgver"
+  cd "$srcdir/$pkgname-$pkgver"
+  git checkout $_gitversion
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir/" install
+}
+
+# vim:set ts=2 sw=2 et:

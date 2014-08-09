@@ -9,7 +9,7 @@ Source0:        http://lvwol.niftiestsoftware.com/libvirt-wakeonlan-%{_version}.
 
 BuildArch:      noarch
 BuildRequires:  make
-Requires:       libvirt-python,libvirt,pcapy
+Requires:       libvirt-python,libvirt
 
 %description
 Daemon that starts KVM instances from wake on lan packets.
