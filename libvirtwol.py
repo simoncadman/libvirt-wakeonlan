@@ -28,6 +28,7 @@ import socket
 import struct
 import string
 import libvirt
+import logging
 from xml.dom import minidom
 
 
@@ -37,7 +38,7 @@ class LibVirtWakeOnLan:
     def StartServerByMACAddress(mac):
         conn = libvirt.open(None)
         if conn is None:
-            print 'Failed to open connection to the hypervisor'
+            logging.error('Failed to open connection to the hypervisor')
             sys.exit(1)
 
         domains = conn.listDefinedDomains()
@@ -52,9 +53,10 @@ class LibVirtWakeOnLan:
                     macadd = interface.getElementsByTagName("mac")
                     foundmac = macadd[0].getAttribute("address")
                     if foundmac == mac:
-                        print "Waking up", domainName
+                        logging.info("Waking up %s", domainName)
                         domain.create()
                         return True
+        logging.info("Didn't find a VM with MAC address %s", mac)
         return False
 
     @staticmethod
@@ -127,9 +129,10 @@ class LibVirtWakeOnLan:
 
 if __name__ == '__main__':
     from lvwolutils import Utils
+    Utils.SetupLogging()
 
     # line below is replaced on commit
-    LVWOLVersion = "20140808 103335"
+    LVWOLVersion = "20140809 100935"
     Utils.ShowVersion(LVWOLVersion)
 
     if len(sys.argv) < 2:
