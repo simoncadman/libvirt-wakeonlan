@@ -18,10 +18,6 @@ install: all
         # redhat
 	if [ -f /etc/redhat-release ] ; then \
                   mkdir -p $(DESTDIR)/etc/{init.d,sysconfig}; \
-                  ls -al ${srcdir} \
-                  ls -al ${srcdir}/packages \
-                  ls -al ${srcdir}/packages/redhat \
-                  ls -al ${srcdir}/packages/redhat/* \
                   ${INSTALL} ${srcdir}/packages/redhat/init.d/libvirt-wakeonlan ${DESTDIR}/etc/init.d/libvirt-wakeonlan; \
                   ${INSTALL} ${srcdir}/packages/redhat/sysconfig/libvirt-wakeonlan ${DESTDIR}/etc/sysconfig/libvirt-wakeonlan; \
         fi
