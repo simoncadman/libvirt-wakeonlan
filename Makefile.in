@@ -31,7 +31,7 @@ install: all
 
         # arch
 	if [ -f /etc/arch-release ] ; then \
-                  mkdir -p ${prefix}/lib/systemd/system $(DESTDIR)/etc; \
+                  mkdir -p ${prefix}/lib/systemd/system $(DESTDIR)/etc/systemd; \
                   ${INSTALL} ${srcdir}/init/arch/systemd/system/libvirt-wakeonlan.service ${prefix}/lib/systemd/system/libvirt-wakeonlan.service; \
                   ${INSTALL} ${srcdir}/init/arch/systemd/libvirt-wakeonlan.conf ${DESTDIR}/etc/systemd/libvirt-wakeonlan.conf; \
         fi
