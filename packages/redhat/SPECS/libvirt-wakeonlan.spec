@@ -31,5 +31,5 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %attr(744, root, root) %{_sysconfdir}/sysconfig/libvirt-wakeonlan
 
 %changelog
-* Sat Aug 08 2014 Simon Cadman <src@niftiestsoftware.com> 20140808-1)
+* Sat Aug 09 2014 Simon Cadman <src@niftiestsoftware.com> 20140809-1)
 - RPM package release
