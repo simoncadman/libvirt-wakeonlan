@@ -2,7 +2,7 @@ prefix = $(DESTDIR)@prefix@
 srcdir = @srcdir@
 INSTALL = @INSTALL@
 
-all: libvirtwol
+all: libvirtwol.py
 
 install: all 
 	mkdir -p ${prefix}/sbin/
