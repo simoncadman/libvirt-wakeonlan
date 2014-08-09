@@ -34,9 +34,9 @@ if __name__ == '__main__':  # pragma: no cover
     Utils.SetupLogging()
 
     # line below is replaced on commit
-    LVWOLVersion = "20140807 221108"
+    LVWOLVersion = "20140809 101221"
     Utils.ShowVersion(LVWOLVersion)
-    
+
     # add debug output here
     print "LibVirt Wake-On-Lan Version " + LVWOLVersion
     conn = libvirt.open(None)
@@ -66,7 +66,8 @@ if __name__ == '__main__':  # pragma: no cover
             modeltype = model[0].getAttribute("type")
             address = interface.getElementsByTagName("address")
             addresstype = address[0].getAttribute("type")
-            print "MAC address '%s', source bridge '%s', model type '%s', address type '%s'" % ( foundmac, sourcebridge, modeltype, addresstype )
+            print "MAC address '%s', source bridge '%s', model type '%s', address type '%s'" \
+                % (foundmac, sourcebridge, modeltype, addresstype)
         if len(sys.argv) == 2 and sys.argv[1] == "xml":
             print domain.XMLDesc(0)
         print ""
