@@ -1,0 +1,6 @@
+libvirt-wakeonlan for Debian
+-------------------------
+
+Start the daemon, and any wake-on-lan packet will start the VM with the MAC address.
+
+ -- simon cadman <src@niftiestsoftware.com>  Sun, 10 Aug 2014 15:58:10 +0000

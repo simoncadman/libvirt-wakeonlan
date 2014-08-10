@@ -1,0 +1,15 @@
+Source: libvirt-wakeonlan
+Section: net
+Priority: extra
+Maintainer: simon cadman <src@niftiestsoftware.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev
+Standards-Version: 3.9.3
+Homepage: http://lvwol.niftiestsoftware.com/
+Vcs-Git: git://github.com/simoncadman/libvirt-wakeonlan.git
+Vcs-Browser: https://github.com/simoncadman/libvirt-wakeonlan
+
+Package: libvirt-wakeonlan
+Architecture: all
+Depends: ${misc:Depends}, python2.7|python2.6, python-libvirt, libvirt, python-libpcap
+Description: Starts KVM instances from wake on lan packets
+ Starts KVM instances from wake on lan packets
