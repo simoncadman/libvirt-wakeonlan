@@ -1,0 +1,8 @@
+[Unit]
+Description=Starts KVM instances from wake on lan packets
+
+[Service]
+ExecStartPre=cd /usr/sbin/
+ExecStart=./libvirtwol $LIBVIRTDWOL_INTERFACE
+Type=simple
+
