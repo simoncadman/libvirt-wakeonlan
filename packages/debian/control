@@ -10,6 +10,6 @@ Vcs-Browser: https://github.com/simoncadman/libvirt-wakeonlan
 
 Package: libvirt-wakeonlan
 Architecture: all
-Depends: ${misc:Depends}, python2.7|python2.6, python-libvirt, libvirt, python-libpcap
+Depends: ${misc:Depends}, python2.7|python2.6, python-libvirt, libvirt-bin, python-libpcap
 Description: Starts KVM instances from wake on lan packets
  Starts KVM instances from wake on lan packets
