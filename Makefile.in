@@ -5,8 +5,9 @@ INSTALL = @INSTALL@
 all: libvirtwol.py
 
 install: all 
-	mkdir -p ${prefix}/sbin/
-	${INSTALL} ${srcdir}/libvirtwol.py ${prefix}/sbin/libvirtwol
+	mkdir -p ${prefix}/share/libvirt-wakeonlan/testing
+	${INSTALL} ${srcdir}/*.py ${prefix}/share/libvirt-wakeonlan/
+	${INSTALL} ${srcdir}/testing/* ${prefix}/share/libvirt-wakeonlan/testing/
 	
 	# gentoo
 	if [ -f /etc/gentoo-release ] ; then \
