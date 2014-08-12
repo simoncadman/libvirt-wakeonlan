@@ -12,7 +12,8 @@ start() {
     start-stop-daemon --start \
 	--background -m \
 	--pidfile=/var/run/libvirt-wakeonlan.pid \
-        --exec /usr/sbin/libvirtwol -- ${LIBVIRTDWOL_INTERFACE}
+    -d /usr/share/libvirt-wakeonlan \
+    --exec ./libvirtwol.py -- ${LIBVIRTDWOL_INTERFACE}
     eend $?
 }
 

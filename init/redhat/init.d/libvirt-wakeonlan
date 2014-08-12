@@ -12,7 +12,7 @@
 # Source function library.                                                                                                                        
 . /etc/rc.d/init.d/functions                                                                                                                      
                                                                                                                                                   
-exec="/usr/sbin/libvirtwol"                                                                                                     
+exec="./libvirtwol.py"                                                                                                     
 prog="libvirt-wakeonlan"                                                                                                                        
                                                                                                                                                   
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog                                                                                                                               
@@ -23,7 +23,8 @@ pidfile=/var/run/$proc.pid
 start() {                                                                                                                                                                           
     [ -x $exec ] || exit 5                                                                                                                                                          
     echo -n $"Starting $prog: "                                                                                                                                                     
-    # if not running, start it up here, usually something like "daemon $exec"                                                                                                       
+    # if not running, start it up here, usually something like "daemon $exec"
+    cd /usr/share/libvirt-wakeonlan
     daemon $exec $LIBVIRTDWOL_INTERFACE                                                                                                                                                                   
     retval=$?                                                                                                                                                                       
     echo                                                                                                                                                                            

@@ -2,7 +2,7 @@
 Description=Starts KVM instances from wake on lan packets
 
 [Service]
-ExecStartPre=cd /usr/sbin/
-ExecStart=./libvirtwol $LIBVIRTDWOL_INTERFACE
+ExecStartPre=cd /usr/share/libvirt-wakeonlan
+ExecStart=./libvirtwol.py $LIBVIRTDWOL_INTERFACE
 Type=simple
 
