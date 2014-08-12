@@ -13,4 +13,6 @@ export name="$1"
 export category="$2"
 export testconfig="$5"
 
+ls -al /usr/share/libvirt-wakeonlan
+
 exit 0
