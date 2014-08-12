@@ -14,5 +14,6 @@ export category="$2"
 export testconfig="$5"
 
 ls -al /usr/share/libvirt-wakeonlan
+py.test2 -rxs --cov-report xml  --cov . || py.test -rxs --cov-report xml  --cov .
 
 exit 0
