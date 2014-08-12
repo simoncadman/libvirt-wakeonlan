@@ -27,6 +27,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %files
 %attr(644, root, root) %{_usr}/share/libvirt-wakeonlan/*.py
+%attr(644, root, root) %{_usr}/share/libvirt-wakeonlan/*.pyc
+%attr(644, root, root) %{_usr}/share/libvirt-wakeonlan/*.pyo
 %attr(644, root, root) %{_usr}/share/libvirt-wakeonlan/testing/*.sh
 %attr(744, root, root) %{_sysconfdir}/init.d/libvirt-wakeonlan
 %attr(744, root, root) %{_sysconfdir}/sysconfig/libvirt-wakeonlan
