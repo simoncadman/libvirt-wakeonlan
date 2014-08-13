@@ -13,7 +13,7 @@ start() {
 	--background -m \
 	--pidfile=/var/run/libvirt-wakeonlan.pid \
     -d /usr/share/libvirt-wakeonlan \
-    --exec ./libvirtwol.py -- ${LIBVIRTDWOL_INTERFACE}
+    --exec /usr/share/libvirt-wakeonlan/libvirtwol.py -- ${LIBVIRTDWOL_INTERFACE}
     eend $?
 }
 
