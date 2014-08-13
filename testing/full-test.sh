@@ -17,7 +17,6 @@ ls -al /usr/share/libvirt-wakeonlan
 py.test2 -rxs --cov-report xml  --cov . || py.test -rxs --cov-report xml  --cov .
 
 # start and stop daemon
-exit 0
 
 # gentoo
 if [[ -f /etc/gentoo-release ]] ; then
