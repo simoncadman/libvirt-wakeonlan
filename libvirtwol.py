@@ -97,6 +97,8 @@ class LibVirtWakeOnLan:
 
     @staticmethod
     def DecodeIPPacket(s):
+        if len(s) < 20:
+            return None
         d = {}
         d['version'] = (ord(s[0]) & 0xf0) >> 4
         d['header_len'] = ord(s[0]) & 0x0f
@@ -132,7 +134,7 @@ if __name__ == '__main__':
     Utils.SetupLogging()
 
     # line below is replaced on commit
-    LVWOLVersion = "20140809 100935"
+    LVWOLVersion = "20140814 231218"
     Utils.ShowVersion(LVWOLVersion)
 
     if len(sys.argv) < 2:

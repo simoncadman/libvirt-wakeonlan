@@ -32,8 +32,19 @@ def test_GetMACAddress():
     assert LibVirtWakeOnLan.GetMACAddress(base64.b64decode(testdata)) == "de:ad:be:ef:b3:3f"
 
 
+def test_InvalidGetMACAddress():
+    testdata = "dGVzdHBhY2tldAo="
+    assert LibVirtWakeOnLan.GetMACAddress(base64.b64decode(testdata)) is None
+
+
+def test_DecodeInvalidPacket():
+    testdata = "quiev2Moh7jahXoo3ai"
+    assert LibVirtWakeOnLan.DecodeIPPacket(testdata) is None
+
+
 def test_DecodeIPPacket():
-    pass
+    testdata = "Pa3ieZi4zejah1eiPh9e"
+    assert LibVirtWakeOnLan.DecodeIPPacket(testdata) is not None
 
 
 def test_InspectIPPacketNoMAC():
