@@ -26,7 +26,7 @@ install: all
         # debian
 	if [ -f /etc/debian-release || -f /etc/debian_version ] ; then \
                   mkdir -p $(DESTDIR)/etc/{rc.d,default}; \
-                  ${INSTALL} ${srcdir}/init/debian/init/libvirt-wakeonlan ${DESTDIR}/etc/init/libvirt-wakeonlan; \
+                  ${INSTALL} ${srcdir}/init/debian/init/libvirt-wakeonlan.conf ${DESTDIR}/etc/init/libvirt-wakeonlan.conf; \
                   ${INSTALL} ${srcdir}/init/debian/default/libvirt-wakeonlan ${DESTDIR}/etc/default/libvirt-wakeonlan; \
         fi
 
