@@ -16,26 +16,32 @@ export testconfig="$5"
 ls -al /usr/share/libvirt-wakeonlan
 py.test2 -rxs --cov-report xml  --cov . || py.test -rxs --cov-report xml  --cov .
 
+exit 0
+
 # start and stop daemon
 
 # gentoo
 if [[ -f /etc/gentoo-release ]] ; then
-            /etc/init.d/libvirt-wakeonlan status
+            /etc/init.d/libvirt-wakeonlan start
+            /etc/init.d/libvirt-wakeonlan stop
 fi
 
 # redhat
 if [[ -f /etc/redhat-release ]] ; then
-            service libvirt-wakeonlan status
+            service libvirt-wakeonlan start
+            service libvirt-wakeonlan stop
 fi
 
 # debian
 if [[ -f /etc/debian-release || -f /etc/debian_version ]] ; then
-            service libvirt-wakeonlan status
+            service libvirt-wakeonlan start
+            service libvirt-wakeonlan stop
 fi
 
 # arch
 if [[ -f /etc/arch-release ]] ; then
-            systemctl status libvirt-wakeonlan
+            systemctl start libvirt-wakeonlan
+            systemctl stop libvirt-wakeonlan
 fi
 
 exit 0
