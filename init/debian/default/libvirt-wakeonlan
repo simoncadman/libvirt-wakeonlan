@@ -1,4 +1,1 @@
-# /etc/conf.d/libvirt-wakeonlan
-
 LIBVIRTDWOL_INTERFACE="eth0"
-

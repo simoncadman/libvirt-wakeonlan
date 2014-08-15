@@ -4,6 +4,7 @@ description="Starts libvirt instances from wake on lan packets"
 
 depend() {
     need net
+    after libvirtd
 }
 
 start() {

@@ -6,3 +6,6 @@ ExecStartPre=cd /usr/share/libvirt-wakeonlan
 ExecStart=./libvirtwol.py $LIBVIRTDWOL_INTERFACE
 Type=simple
 
+[Unit]
+Requires=libvirt
+After=libvirt
