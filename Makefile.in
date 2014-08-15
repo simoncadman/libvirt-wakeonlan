@@ -12,27 +12,27 @@ install: all
 	# gentoo
 	if [ -f /etc/gentoo-release ] ; then \
                   mkdir -p $(DESTDIR)/etc/{init.d,conf.d}; \
-                  ${INSTALL} ${srcdir}/init/gentoo/init.d/libvirt-wakeonlan ${DESTDIR}/etc/init.d/libvirt-wakeonlan; \
-                  ${INSTALL} ${srcdir}/init/gentoo/conf.d/libvirt-wakeonlan ${DESTDIR}/etc/conf.d/libvirt-wakeonlan; \
+                  ${INSTALL} ${srcdir}/init/gentoo/init.d/libvirt-wakeonlan $(DESTDIR)/etc/init.d/libvirt-wakeonlan; \
+                  ${INSTALL} ${srcdir}/init/gentoo/conf.d/libvirt-wakeonlan $(DESTDIR)/etc/conf.d/libvirt-wakeonlan; \
         fi
 
         # redhat
 	if [ -f /etc/redhat-release ] ; then \
                   mkdir -p $(DESTDIR)/etc/{init.d,sysconfig}; \
-                  ${INSTALL} ${srcdir}/init/redhat/init.d/libvirt-wakeonlan ${DESTDIR}/etc/init.d/libvirt-wakeonlan; \
-                  ${INSTALL} ${srcdir}/init/redhat/sysconfig/libvirt-wakeonlan ${DESTDIR}/etc/sysconfig/libvirt-wakeonlan; \
+                  ${INSTALL} ${srcdir}/init/redhat/init.d/libvirt-wakeonlan $(DESTDIR)/etc/init.d/libvirt-wakeonlan; \
+                  ${INSTALL} ${srcdir}/init/redhat/sysconfig/libvirt-wakeonlan $(DESTDIR)/etc/sysconfig/libvirt-wakeonlan; \
         fi
 
         # debian
 	if [ -f /etc/debian_version ] ; then \
                   mkdir -p $(DESTDIR)/etc/{init,default}; \
-                  ${INSTALL} ${srcdir}/init/debian/init/libvirt-wakeonlan.conf ${DESTDIR}/etc/init/libvirt-wakeonlan.conf; \
-                  ${INSTALL} ${srcdir}/init/debian/default/libvirt-wakeonlan ${DESTDIR}/etc/default/libvirt-wakeonlan; \
+                  ${INSTALL} ${srcdir}/init/debian/init/libvirt-wakeonlan.conf $(DESTDIR)/etc/init/libvirt-wakeonlan.conf; \
+                  ${INSTALL} ${srcdir}/init/debian/default/libvirt-wakeonlan $(DESTDIR)/etc/default/libvirt-wakeonlan; \
         fi
 
         # arch
 	if [ -f /etc/arch-release ] ; then \
                   mkdir -p ${prefix}/lib/systemd/system $(DESTDIR)/etc/systemd; \
-                  ${INSTALL} ${srcdir}/init/arch/systemd/system/libvirt-wakeonlan.service ${prefix}/lib/systemd/system/libvirt-wakeonlan.service; \
-                  ${INSTALL} ${srcdir}/init/arch/systemd/libvirt-wakeonlan.conf ${DESTDIR}/etc/systemd/libvirt-wakeonlan.conf; \
+                  ${INSTALL} ${srcdir}/init/arch/systemd/system/libvirt-wakeonlan.service $(DESTDIR)/lib/systemd/system/libvirt-wakeonlan.service; \
+                  ${INSTALL} ${srcdir}/init/arch/systemd/libvirt-wakeonlan.conf $(DESTDIR)/etc/systemd/libvirt-wakeonlan.conf; \
         fi
