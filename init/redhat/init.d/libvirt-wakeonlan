@@ -12,8 +12,8 @@
 # Source function library.                                                                                                                        
 . /etc/rc.d/init.d/functions                                                                                                                      
                                                                                                                                                   
-exec="./libvirtwol.py"                                                                                                     
-prog="/usr/share/libvirt-wakeonlan/libvirtwol.py"
+exec="/usr/share/libvirt-wakeonlan/libvirtwol.py"
+prog="libvirt-wakeonlan"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog                                                                                                                               
                                                                                                                                                                                     
