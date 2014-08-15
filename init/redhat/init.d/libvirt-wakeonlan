@@ -13,8 +13,8 @@
 . /etc/rc.d/init.d/functions                                                                                                                      
                                                                                                                                                   
 exec="./libvirtwol.py"                                                                                                     
-prog="libvirt-wakeonlan"                                                                                                                        
-                                                                                                                                                  
+prog="/usr/share/libvirt-wakeonlan/libvirtwol.py"
+
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog                                                                                                                               
                                                                                                                                                                                     
 lockfile=/var/lock/subsys/$prog                                                                                                                                                     
